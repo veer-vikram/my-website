@@ -1,0 +1,32 @@
+# MacOS system files
+.DS_Store
+
+# Windows thumbnail cache files
+Thumbs.db
+
+# VSCode settings folder
+.vscode/
+
+# IDE/project backup files
+*.sublime-project
+*.sublime-workspace
+
+# Node.js dependencies (if you use Node for build tools)
+node_modules/
+
+# Build/output directories (modify these if your folders are named differently)
+dist/
+build/
+
+# Bower components (if you're using Bower for front-end package management)
+bower_components/
+
+# Temporary folders/files
+tmp/
+temp/
+
+# Log files
+*.log
+
+# Cache directories
+.cache/
