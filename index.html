@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veer Vikram</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>V</text></svg>" type="image/svg+xml">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            color: white;
+            background-color: #121212;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px; /* Increased padding */
+            display: flex;
+            justify-content: flex-end;
+            align-items: center; /* Align items vertically */
+            z-index: 1000;
+            background-color: rgba(18, 18, 18, 0.3); /* Subtle background */
+            backdrop-filter: blur(5px);
+        }
+
+        nav .desktop-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px; /* Increased spacing */
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative; /* For hover effect */
+        }
+        
+        /* Underline hover effect */
+        nav .desktop-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            display: block;
+            margin-top: 5px;
+            right: 0;
+            background: #ff5e62;
+            transition: width 0.3s ease;
+            -webkit-transition: width 0.3s ease;
+        }
+
+        nav .desktop-links a:hover::after {
+            width: 100%;
+            left: 0;
+            background-color: #ff5e62;
+        }
+
+
+        nav .desktop-links a:hover {
+            color: #ff5e62;
+        }
+
+        .hamburger {
+            display: none; /* Hidden by default */
+            cursor: pointer;
+            width: 30px;
+            height: 25px;
+            position: relative;
+            z-index: 2000;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background: white;
+            position: absolute;
+            transition: all 0.3s ease-in-out; /* Smoother transition */
+            border-radius: 2px; /* Rounded bars */
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 10px; }
+        .hamburger span:nth-child(3) { top: 20px; }
+
+        /* Hamburger to X transformation */
+        .hamburger.active span:nth-child(1) {
+            top: 10px;
+            transform: rotate(135deg); /* 45 + 90 */
+        }
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-20px); /* Slide out */
+        }
+        .hamburger.active span:nth-child(3) {
+            top: 10px;
+            transform: rotate(-135deg); /* -45 - 90 */
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: -100%; /* Start off-screen */
+            width: 70%;
+            max-width: 300px; /* Max width */
+            height: 100vh;
+            background: rgba(20, 20, 20, 0.95); /* Slightly darker/less transparent */
+            backdrop-filter: blur(10px); /* Blur background */
+            padding: 100px 30px 30px; /* More top padding */
+            transition: right 0.5s cubic-bezier(0.23, 1, 0.32, 1); /* Smoother ease */
+            z-index: 1500;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2); /* Add shadow */
+        }
+
+        .mobile-menu.active {
+            right: 0; /* Slide in */
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            font-size: 22px; /* Larger font */
+            margin: 25px 0; /* Increased margin */
+            transition: color 0.3s ease, transform 0.3s ease; /* Add transform transition */
+            text-align: center;
+        }
+         .mobile-menu a:hover {
+            color: #ff5e62;
+            transform: translateX(5px); /* Slight move on hover */
+        }
+
+
+        #home {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center; /* Center align content */
+            padding: 0 20px; /* Add padding for smaller screens */
+        }
+
+        .name {
+            font-size: clamp(8vw, 15vw, 150px); /* Responsive font size */
+            font-weight: bold;
+            position: fixed; /* Changed from fixed to allow centering */
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease;
+            width: 100%; /* Ensure it takes full width for centering */
+            text-align: center;
+        }
+
+        .typed-container {
+           /* position: fixed; /* Changed from fixed */
+            margin-top: 30vh; /* Position below name using margin */
+           /* top: 70%;
+            left: 50%; */
+          /*  transform: translate(-50%, -50%); */
+            font-size: clamp(1.5rem, 3vw, 2rem); /* Responsive font size */
+            text-align: center;
+            opacity: 0; /* Start hidden */
+            transition: opacity 1s ease 0.5s; /* Delayed fade-in */
+            width: 90%; /* Limit width */
+            max-width: 800px; /* Max width */
+        }
+
+
+        .typed-container.visible {
+            opacity: 1;
+        }
+
+        footer {
+            padding: 25px 0;
+            text-align: center;
+            background-color: rgba(18, 18, 18, 0.6);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 50; /* Above particles, below content */
+            transition: all 0.3s ease;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .contact-section, .social-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .section-label {
+            font-size: 16px;
+            margin-right: 15px;
+            opacity: 0.8;
+        }
+
+        .email-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            cursor: pointer; /* Make container clickable */
+        }
+
+        .email-icon img { /* Style the image directly */
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+            display: block; /* Remove extra space below image */
+        }
+
+        .email-icon img:hover {
+            transform: scale(1.1);
+        }
+
+        .email-text {
+            font-size: 14px;
+            max-width: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: max-width 0.5s ease, opacity 0.3s ease 0.1s; /* Delay opacity */
+            opacity: 0;
+            margin-left: 5px; /* Space from icon */
+        }
+
+        .email-text.visible {
+            max-width: 300px; /* Adjust as needed */
+            opacity: 1;
+        }
+
+        .click-indicator {
+            /* Removed absolute positioning, now flows naturally */
+            font-size: 14px; /* Match email text size */
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            opacity: 1;
+            transition: opacity 0.3s ease, max-width 0.3s ease, margin-left 0.3s ease; /* Added transitions */
+            pointer-events: none; /* Don't intercept clicks meant for container */
+            max-width: 100px; /* Initial max-width */
+            overflow: hidden;
+            margin-left: -10px; /* Overlap slightly initially */
+            order: -1; /* Appear before the icon initially */
+        }
+
+        .click-indicator.hidden {
+            opacity: 0;
+            max-width: 0; /* Collapse */
+            margin-left: 0;
+        }
+
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 15px; /* Increased gap */
+        }
+
+        .social-icon img { /* Style the image directly */
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s ease;
+            display: block; /* Remove extra space */
+        }
+
+        .social-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        .social-link span { /* Target the text part */
+             margin-left: 8px; /* Space between icon and text */
+        }
+
+        .social-link:hover {
+            color: #ff5e62;
+        }
+         .social-link:hover .social-icon img {
+            transform: scale(1.1);
+        }
+
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            nav {
+                 padding: 15px 20px; /* Adjust padding */
+                 justify-content: flex-end; /* Keep hamburger right */
+             }
+            
+            nav .desktop-links {
+                display: none; /* Hide desktop links */
+            }
+
+            .hamburger {
+                display: block; /* Show hamburger */
+            }
+
+            .mobile-menu {
+                display: block; /* Always render mobile menu for transition */
+            }
+
+            .name {
+                font-size: 18vw; /* Adjust size for mobile */
+                 position: fixed; /* Keep fixed for scroll effect */
+                top: 40%;
+            }
+
+            .typed-container {
+                font-size: 1.9rem; /* Adjust size */
+                /* position: fixed; Keep fixed */
+               /* top: 65%; /* Adjust position */
+                margin-top: 25vh;
+            }
+
+            .footer-content {
+                flex-direction: column; /* Stack items vertically */
+                gap: 20px; /* Adjust gap */
+                 padding-bottom: 15px; /* Add padding */
+            }
+             footer {
+                padding: 15px 0;
+            }
+
+            .email-container {
+                justify-content: center; /* Center email items */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <nav>
+        <div class="desktop-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="gallery.html">Photo Gallery</a>
+        </div>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="gallery.html">Photo Gallery</a>
+    </div>
+
+    <section id="home">
+        <div class="name">Veer Vikram</div>
+        <div class="typed-container">
+            <span id="typed"></span>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-section">
+                <span class="section-label">Contact me:</span>
+                <div class="email-container" id="email-trigger">
+                    <div class="click-indicator" id="click-indicator">Click to view</div>
+                     <div class="email-icon">
+                       <!-- Make sure you have an 'assets/images' folder -->
+                       <img src="assets/images/email.png" alt="Email Icon">
+                    </div>
+                    <div class="email-text" id="email-text">dr@veervikram.com</div>
+                     <!-- Removed original click indicator div -->
+                </div>
+            </div>
+            <div class="social-section">
+                <span class="section-label">Socials:</span>
+                <div class="social-links">
+                    <a href="https://instagram.com/veer.vkrm" target="_blank" class="social-link">
+                        <div class="social-icon">
+                             <!-- Make sure you have an 'assets/images' folder -->
+                            <img src="assets/images/instagram.png" alt="Instagram">
+                        </div>
+                        <span>@veer.vkrm</span>
+                    </a>
+                    <!-- Add more social links as needed -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize particles.js
+        particlesJS("particles-js", { particles: { number: { value: 80, density: { enable: true, value_area: 800 } }, color: { value: "#ffffff" }, shape: { type: "circle", stroke: { width: 0, color: "#000000" }, polygon: { nb_sides: 5 } }, opacity: { value: 0.5, random: false, anim: { enable: false, speed: 1, opacity_min: 0.1, sync: false } }, size: { value: 3, random: true, anim: { enable: false, speed: 40, size_min: 0.1, sync: false } }, line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.4, width: 1 }, move: { enable: true, speed: 6, direction: "none", random: false, straight: false, out_mode: "out", bounce: false, attract: { enable: false, rotateX: 600, rotateY: 1200 } } }, interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" }, resize: true }, modes: { grab: { distance: 400, line_linked: { opacity: 1 } }, bubble: { distance: 400, size: 40, duration: 2, opacity: 8, speed: 3 }, repulse: { distance: 200, duration: 0.4 }, push: { particles_nb: 4 }, remove: { particles_nb: 2 } } }, retina_detect: true });
+
+        // Scroll animation for name
+        $(window).scroll(function() {
+            let scroll = $(window).scrollTop();
+            // Only apply scroll effect if not on a very small screen where fixed might overlap footer
+             if ($(window).width() > 768) {
+                let homeHeight = $('#home').height() > 0 ? $('#home').height() : $(window).height(); // Ensure homeHeight is positive
+                let scale = Math.max(0.2, 1 - scroll / (homeHeight * 0.8)); // Adjust divisor for effect range
+                let opacity = Math.max(0.1, 1 - scroll / (homeHeight * 0.5));
+
+                $('.name').css({
+                    'transform': 'translate(-50%, -50%) scale(' + scale + ')',
+                    'opacity': opacity,
+                     'position': 'fixed' // Keep fixed while scrolling
+                });
+            } else {
+                 // On small screens, reset transform or handle differently if needed
+                 $('.name').css({
+                     'transform': 'translate(-50%, -50%) scale(1)', // Reset scale
+                     'opacity': 1,
+                     'position': 'fixed' // Still fixed
+                 });
+            }
+
+            // Show typing effect when scrolled slightly or immediately if already scrolled
+             if (scroll > 50 || $('.typed-container').hasClass('visible')) {
+                 $('.typed-container').addClass('visible');
+             } else {
+                 // Optional: hide again if scrolled back to top
+                 // $('.typed-container').removeClass('visible');
+             }
+
+        });
+
+         // Make the typing effect visible after a short delay on load
+        setTimeout(function() {
+            $('.typed-container').addClass('visible');
+            // Trigger scroll handler once to set initial position if already scrolled
+             $(window).trigger('scroll');
+        }, 500); // Reduced delay
+
+
+        // Initialize typed.js
+        let typed = new Typed('#typed', {
+            strings: ['Welcome!', 'This is Veer Vikram.', 'Explore my work and gallery.'],
+            typeSpeed: 50,
+            backSpeed: 30,
+            backDelay: 1500,
+            startDelay: 1000, // Start after container is visible
+            loop: true,
+            smartBackspace: true // Recommended
+        });
+
+        // Email visibility toggle
+        $('#email-trigger').click(function(event) {
+             event.stopPropagation(); // Prevent click from bubbling to document
+             $('#email-text').toggleClass('visible');
+             $('#click-indicator').toggleClass('hidden');
+        });
+
+        // Hide email when clicking elsewhere on the document
+        $(document).click(function(event) {
+            // Check if the click was outside the email container
+            if (!$(event.target).closest('#email-trigger').length) {
+                if ($('#email-text').hasClass('visible')) {
+                     $('#email-text').removeClass('visible');
+                     $('#click-indicator').removeClass('hidden');
+                }
+            }
+        });
+
+        // Mobile menu toggle
+        $('.hamburger').click(function() {
+            $(this).toggleClass('active');
+            $('.mobile-menu').toggleClass('active');
+            // Optional: Prevent body scroll when mobile menu is open
+             $('body').toggleClass('no-scroll'); 
+        });
+
+        // Close mobile menu when clicking a link inside it
+        $('.mobile-menu a').click(function() {
+            $('.hamburger').removeClass('active');
+            $('.mobile-menu').removeClass('active');
+             $('body').removeClass('no-scroll');
+        });
+
+        // Add a class to body to prevent scroll when menu is open (optional)
+         /*
+        body.no-scroll {
+            overflow: hidden;
+        }
+        */
+
+    </script>
+</body>
+</html>
